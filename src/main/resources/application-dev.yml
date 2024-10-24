@@ -1,6 +1,6 @@
 #机器人微信nickName
 bot:
-  botName: pdstar
+  botName: 黄色方块
   wechat.qrcode.path: D:/test
   openai.completio.model: text-davinci-003
   openai.completio.temperature: 0.9

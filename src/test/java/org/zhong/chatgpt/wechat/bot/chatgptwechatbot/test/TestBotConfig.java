@@ -9,6 +9,5 @@ public class TestBotConfig {
 
 	@Test
 	public void test() {
-		System.out.println(JSON.toJSONString(BotConfig.getGroupWhiteList()));
 	}
 }

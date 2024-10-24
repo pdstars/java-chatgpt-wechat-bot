@@ -91,12 +91,12 @@ public class MsgPreProcessor implements MsgProcessor{
 				WehchatMsgQueue.pushSendMsg(botMsg);
 				return;
 			}
-			
+			botMsg.setReplyMsg("无语了");
 			WehchatMsgQueue.pushReplyMsg(botMsg);
 			
 		}else {
-//			botMsg.setReplyMsg("目前我只能针对文本消息进行回答");
-//			WehchatMsgQueue.pushSendMsg(botMsg);
+			botMsg.setReplyMsg("目前我只能针对文本消息进行回答");
+			WehchatMsgQueue.pushSendMsg(botMsg);
 		}
 	}
 }

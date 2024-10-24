@@ -46,21 +46,22 @@ public class TestOpenAI {
 	
 	@Test
 	public void test() {
-		OpenAiService service = new OpenAiService(BotConfig.getAppKey(),"https://api.openai.com/", Duration.ofSeconds(300));
-		CompletionRequest completionRequest = CompletionRequest.builder()
-		        .prompt("你好")
-		        .model("text-davinci-003")
-		        .maxTokens(2000)
-				.temperature(0.8)
-				.topP(1.0)
-				.frequencyPenalty(0.55)
-				.presencePenalty(0.19)
-				.echo(true)
-				.user("1234213213")
-				.build();
-		
-		String text = service.createCompletion(completionRequest).getChoices().get(0).getText();
-		
-		System.out.print(text);
+//
+//		OpenAiService service = new OpenAiService(BotConfig.getAppKey(),"https://api.openai.com/", Duration.ofSeconds(300));
+//		CompletionRequest completionRequest = CompletionRequest.builder()
+//		        .prompt("你好")
+//		        .model("text-davinci-003")
+//		        .maxTokens(2000)
+//				.temperature(0.8)
+//				.topP(1.0)
+//				.frequencyPenalty(0.55)
+//				.presencePenalty(0.19)
+//				.echo(true)
+//				.user("1234213213")
+//				.build();
+//
+//		String text = service.createCompletion(completionRequest).getChoices().get(0).getText();
+//
+//		System.out.print(text);
 	}
 }
