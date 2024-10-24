@@ -6,7 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScans;
 
 @SpringBootApplication
-@ComponentScan(basePackages = "cn.zhouyafeng.itchat4j.controller")
+@ComponentScan({"cn.zhouyafeng.itchat4j.controller","org.zhong.chatgpt.wechat.bot.config"})
 public class ChatgptWechatBotApplication {
 
 	public static void main(String[] args) {

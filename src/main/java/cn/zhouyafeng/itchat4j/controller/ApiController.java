@@ -1,6 +1,8 @@
 package cn.zhouyafeng.itchat4j.controller;
 
 import cn.zhouyafeng.itchat4j.core.Core;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,9 +23,14 @@ import java.nio.file.Files;
 public class ApiController {
     @Value("${bot.wechat.qrcode.path}")
     private String qrCode;
-
+    private static Core core = Core.getInstance();
+    private static Logger LOG = LoggerFactory.getLogger(ApiController.class);
     @GetMapping("/getLoginQrCode")
     public ResponseEntity<byte[]> getQrCode() throws InterruptedException, IOException {
+        if (core.isAlive()) { // 已登陆
+            LOG.info("itchat4j已登陆");
+            return null;
+        }
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -38,7 +45,7 @@ public class ApiController {
                 break;
             }
             Thread.sleep(1000);
-            if(i == 10){
+            if(i == 9){
                 return null;
             }
         }

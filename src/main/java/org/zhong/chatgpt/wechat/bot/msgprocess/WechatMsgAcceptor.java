@@ -1,5 +1,6 @@
 package org.zhong.chatgpt.wechat.bot.msgprocess;
 
+import cn.hutool.extra.spring.SpringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zhong.chatgpt.wechat.bot.config.BotConfig;
@@ -15,7 +16,8 @@ public class WechatMsgAcceptor implements MsgAcceptor{
 	public void start() {
 		logger.info("消息接收线程启动");
 		IMsgHandlerFace msgHandler = new WechatMsgHandler();
-		Wechat wechat = new Wechat(msgHandler, BotConfig.getQrcodePath());
+		BotConfig botConfig = SpringUtil.getBean(BotConfig.class);
+		Wechat wechat = new Wechat(msgHandler, botConfig.getQrcodePath());
 		wechat.start();
 	}
 

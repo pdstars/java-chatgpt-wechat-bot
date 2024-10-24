@@ -31,7 +31,6 @@ import cn.zhouyafeng.itchat4j.beans.BaseMsg;
  */
 public class ChatGPTReplyProcessor implements MsgProcessor{
 
-	private static OpenAiService service = OpenAiServiceBuilder.build(BotConfig.getAppKey(), Duration.ofSeconds(300));
 	/**
 	 * 无竞争
 	 */
@@ -74,14 +73,14 @@ public class ChatGPTReplyProcessor implements MsgProcessor{
 	                .logitBias(new HashMap<>())
 	                .build();
 
-	        List<ChatCompletionChoice> choices = service.createChatCompletion(chatCompletionRequest).getChoices();
-	        String text = choices.get(0).getMessage().getContent();
+//	        List<ChatCompletionChoice> choices = service.createChatCompletion(chatCompletionRequest).getChoices();
+//	        String text = choices.get(0).getMessage().getContent();
 	        
-	        ChatMessage assistantMessage = new ChatMessage(ChatMessageRole.ASSISTANT.value(), text);
+	        ChatMessage assistantMessage = new ChatMessage(ChatMessageRole.ASSISTANT.value(), "");
 	        messages.add(assistantMessage);
 	        mgsMap.put(userName, messages);
 	        
-			botMsg.setReplyMsg(text);
+			botMsg.setReplyMsg("");
 			WehchatMsgQueue.pushSendMsg(botMsg);
 		}catch (Exception e) {
 			e.printStackTrace();

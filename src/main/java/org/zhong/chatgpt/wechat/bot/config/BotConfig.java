@@ -9,169 +9,112 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.yaml.snakeyaml.Yaml;
 import org.zhong.chatgpt.wechat.bot.consts.BotConst;
 
 import cn.hutool.core.io.file.FileReader;
 
+@Configuration
 public class BotConfig {
+	@Value("${bot.botName}")
+	private  String botName;
 
-	private static String botName = "狂追风龙少";
-	
-	private static String atBotName = BotConst.AT+botName;
+	private  String appKey = "";
 
-	private static String appKey = "";
+	@Value("${bot.wechat.qrcode.path}")
+	private  String qrcodePath;
 	
-	private static String qrcodePath = "";
+	private  String proxyHost;
 	
-	private static String proxyHost = "";
+	private  int proxyPort = 0;
 	
-	private static int proxyPort = 0;
+	private  Boolean proxyEnable = false;
 	
-	private static Boolean proxyEnable = false;
+	private  String dictPath = "classpath:dict.txt";
 	
-	private static String dictPath = "classpath:dict.txt";
+	private  List<String> groupWhiteList = new ArrayList<String>(); 
 	
-	private static List<String> groupWhiteList = new ArrayList<String>(); 
-	
-	private static List<String> userWhiteList = new ArrayList<String>(); 
-	
-	static {
-		String rootConfigPath = System.getProperty("rootConfigPath");
-		String groupWhiteListPath = "classpath:groupWhiteList.txt";
-		String userWhiteListPath = "classpath:userWhiteList.txt";
-		InputStream applicationStream = BotConfig.class.getResourceAsStream("/application.yml");
-		
-		if(StringUtils.isNotEmpty(rootConfigPath)) {
-			groupWhiteListPath = rootConfigPath + "/groupWhiteList.txt";
-			userWhiteListPath = rootConfigPath + "/userWhiteList.txt";
-			dictPath = rootConfigPath + "/dict.txt";
-			try {
-				applicationStream = new FileInputStream(new File(rootConfigPath + "/application.yml"));
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		
-		FileReader groupFileReader = new FileReader(groupWhiteListPath);
-		groupWhiteList = groupFileReader.readLines();
-		
-		FileReader userFileReader = new FileReader(userWhiteListPath);
-		userWhiteList = userFileReader.readLines();
-		
-		final Yaml yaml = new Yaml();
-		Map<String, Object> yamlMap = yaml.load(applicationStream);
+	private  List<String> userWhiteList = new ArrayList<String>(); 
 
-		botName = yamlMap.get("bot.botName").toString();
-		Object objQrcodePath = yamlMap.get("bot.wechat.qrcode.path");
-		Object objAppKey = yamlMap.get("bot.appKey");
-		
-		Object enable = yamlMap.get("proxy.enable");
-		if(enable != null) {
-			proxyEnable = Boolean.valueOf(enable.toString());
-		}
-		
-		if(proxyEnable) {
-			proxyHost = yamlMap.get("proxy.host").toString();
-			proxyPort = Integer.valueOf(yamlMap.get("proxy.port").toString());
-		}
-		
-		if(objAppKey == null ) {
-			appKey = System.getProperty("bot.appKey");
-		}else {
-			appKey = objAppKey.toString();
-		}
-		
-		if(objQrcodePath == null) {
-			qrcodePath = System.getProperty("bot.wechat.qrcode.path");
-		}else {
-			qrcodePath = objQrcodePath.toString();
-		}
-		
-		if(StringUtils.isEmpty(qrcodePath)) {
-			qrcodePath = System.getProperty("user.dir");
-		}
-	}
 	
-	public static String getBotName() {
+	public  String getBotName() {
 		return botName;
 	}
 
-	public static void setBotName(String botName) {
-		BotConfig.botName = botName;
+	public  void setBotName(String botName) {
+		this.botName = botName;
 	}
 
-	public static List<String> getGroupWhiteList() {
+	public  List<String> getGroupWhiteList() {
 		return groupWhiteList;
 	}
 
-	public static void setGroupWhiteList(List<String> groupWhiteList) {
-		BotConfig.groupWhiteList = groupWhiteList;
+	public  void setGroupWhiteList(List<String> groupWhiteList) {
+		this.groupWhiteList = groupWhiteList;
 	}
 
-	public static String getAtBotName() {
-		return atBotName;
+	public  String getAtBotName() {
+		return BotConst.AT+botName;
 	}
 
-	public static void setAtBotName(String atBotName) {
-		BotConfig.atBotName = atBotName;
-	}
 
-	public static String getAppKey() {
+	public  String getAppKey() {
 		return appKey;
 	}
 
-	public static void setAppKey(String appKey) {
-		BotConfig.appKey = appKey;
+	public  void setAppKey(String appKey) {
+		this.appKey = appKey;
 	}
 
-	public static List<String> getUserWhiteList() {
+	public  List<String> getUserWhiteList() {
 		return userWhiteList;
 	}
 
-	public static void setUserWhiteList(List<String> userWhiteList) {
-		BotConfig.userWhiteList = userWhiteList;
+	public  void setUserWhiteList(List<String> userWhiteList) {
+		this.userWhiteList = userWhiteList;
 	}
 
-	public static String getQrcodePath() {
+	public  String getQrcodePath() {
 		return qrcodePath;
 	}
 
-	public static void setQrcodePath(String qrcodePath) {
-		BotConfig.qrcodePath = qrcodePath;
+	public void setQrcodePath(String qrcodePath) {
+		this.qrcodePath = qrcodePath;
 	}
 
-	public static String getProxyHost() {
+	public  String getProxyHost() {
 		return proxyHost;
 	}
 
-	public static void setProxyHost(String proxyHost) {
-		BotConfig.proxyHost = proxyHost;
+	public  void setProxyHost(String proxyHost) {
+		this.proxyHost = proxyHost;
 	}
 
-	public static int getProxyPort() {
+	public  int getProxyPort() {
 		return proxyPort;
 	}
 
-	public static void setProxyPort(int proxyPost) {
-		BotConfig.proxyPort = proxyPost;
+	public  void setProxyPort(int proxyPost) {
+		this.proxyPort = proxyPost;
 	}
 
-	public static Boolean getProxyEnable() {
+	public  Boolean getProxyEnable() {
 		return proxyEnable;
 	}
 
-	public static void setProxyEnable(Boolean proxyEnable) {
-		BotConfig.proxyEnable = proxyEnable;
+	public  void setProxyEnable(Boolean proxyEnable) {
+		this.proxyEnable = proxyEnable;
 	}
 
-	public static String getDictPath() {
+	public  String getDictPath() {
 		return dictPath;
 	}
 
-	public static void setDictPath(String dictPath) {
-		BotConfig.dictPath = dictPath;
+	public  void setDictPath(String dictPath) {
+		this.dictPath = dictPath;
 	}
 	
 	

@@ -1,5 +1,6 @@
 package org.zhong.chatgpt.wechat.bot.msgprocess;
 
+import cn.hutool.extra.spring.SpringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.zhong.chatgpt.wechat.bot.config.BotConfig;
 import org.zhong.chatgpt.wechat.bot.consts.BotConst;
@@ -17,6 +18,7 @@ public class MsgPreProcessor implements MsgProcessor{
 	TimedCache<String, String> timedCache = CacheUtil.newTimedCache(20*60*1000);
 	
 	public void process(BotMsg botMsg) {
+		BotConfig botConfig = SpringUtil.getBean(BotConfig.class);
 		BaseMsg baseMsg = botMsg.getBaseMsg();
 		String fromUserNickName = baseMsg.getFromUserNickName();
 		if(StringUtils.isNotEmpty(fromUserNickName)
@@ -31,15 +33,15 @@ public class MsgPreProcessor implements MsgProcessor{
 				|| (!baseMsg.isGroupMsg() && timedCache.get(baseMsg.getFromUserName()) != null)) {
 			return;
 		}
-		
+
 		if(baseMsg.isGroupMsg()) {//群聊
-			
-			if(!BotConfig.getGroupWhiteList().contains(baseMsg.getGroupName())) {
+
+			if(!botConfig.getGroupWhiteList().contains(baseMsg.getGroupName())) {
 				//如果群聊不在白名单
 				return;
 			}
 			
-			if(!baseMsg.getContent().contains(BotConfig.getAtBotName())) {
+			if(!baseMsg.getContent().contains(botConfig.getAtBotName())) {
 				//如果不是@我的消息
 				return;
 			}
@@ -53,8 +55,8 @@ public class MsgPreProcessor implements MsgProcessor{
 			}
 		}else {//私聊
 			
-			if(!BotConfig.getUserWhiteList().isEmpty()
-					&& !BotConfig.getUserWhiteList().contains(baseMsg.getFromUserNickName())) {
+			if(!botConfig.getUserWhiteList().isEmpty()
+					&& !botConfig.getUserWhiteList().contains(baseMsg.getFromUserNickName())) {
 				return;
 			}
 			
@@ -70,7 +72,7 @@ public class MsgPreProcessor implements MsgProcessor{
 		
 		if (baseMsg.getType().equals(MsgTypeEnum.TEXT.getType())) {
 			
-			baseMsg.setContent(baseMsg.getContent().replace(BotConfig.getAtBotName(), ""));
+			baseMsg.setContent(baseMsg.getContent().replace(botConfig.getAtBotName(), ""));
 			
 			String content = baseMsg.getContent();
 			if(StringUtils.isEmpty(content)) {

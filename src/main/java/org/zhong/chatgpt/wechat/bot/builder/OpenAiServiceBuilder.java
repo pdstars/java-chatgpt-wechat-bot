@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.X509TrustManager;
 
+import cn.hutool.extra.spring.SpringUtil;
 import org.zhong.chatgpt.wechat.bot.config.BotConfig;
 import org.zhong.chatgpt.wechat.bot.util.SSLSocketClientUtil;
 
@@ -39,15 +40,16 @@ public class OpenAiServiceBuilder {
 	private static OkHttpClient httpClient(String token, Duration timeout) {
 		
 		X509TrustManager manager = SSLSocketClientUtil.getX509TrustManager();
+		BotConfig botConfig = SpringUtil.getBean(BotConfig.class);
 		Builder builder = new OkHttpClient.Builder()
                 .addInterceptor(new AuthenticationInterceptor(token))
                 .connectionPool(new ConnectionPool(5, 1, TimeUnit.SECONDS))
                 .readTimeout(timeout.toMillis(), TimeUnit.MILLISECONDS)
                 .sslSocketFactory(SSLSocketClientUtil.getSocketFactory(manager), manager)// 忽略校验
                 .hostnameVerifier(SSLSocketClientUtil.getHostnameVerifier());//忽略校验
-        
-        if(BotConfig.getProxyEnable()) {
-        	Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(BotConfig.getProxyHost(), BotConfig.getProxyPort()));
+
+        if(botConfig.getProxyEnable()) {
+        	Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(botConfig.getProxyHost(), botConfig.getProxyPort()));
         	builder.proxy(proxy);
         }
         

@@ -26,8 +26,6 @@ import cn.zhouyafeng.itchat4j.beans.BaseMsg;
  */
 public class OpenAIReplyProcessor implements MsgProcessor{
 
-	private static OpenAiService service = OpenAiServiceBuilder.build(BotConfig.getAppKey(), Duration.ofSeconds(300));
-	
 	private static String model = "text-davinci-003";
 	private static Double temperature = 0.9;
 	private static Integer maxTokens = 2000;
@@ -73,7 +71,7 @@ public class OpenAIReplyProcessor implements MsgProcessor{
 		
 		try {
 	
-			String text = service.createCompletion(completionRequest).getChoices().get(0).getText();
+			String text = "";
 			botMsg.setReplyMsg(text);
 			WehchatMsgQueue.pushSendMsg(botMsg);
 			

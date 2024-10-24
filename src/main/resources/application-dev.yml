@@ -1,0 +1,11 @@
+#机器人微信nickName
+bot:
+  botName: pdstar
+  wechat.qrcode.path: D:/test
+  openai.completio.model: text-davinci-003
+  openai.completio.temperature: 0.9
+  openai.completio.max_tokens: 2000
+  openai.completio.top_p: 1
+  openai.completio.frequency_penalty: 0.0
+  openai.completio.presence_penalty: 0.6
+  openai.completio.stop:
