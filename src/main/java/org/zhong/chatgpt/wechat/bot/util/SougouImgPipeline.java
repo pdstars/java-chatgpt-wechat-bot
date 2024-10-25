@@ -1,5 +1,8 @@
 package org.zhong.chatgpt.wechat.bot.util;
 
+import cn.hutool.extra.spring.SpringUtil;
+import org.zhong.chatgpt.wechat.bot.config.BotConfig;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -27,7 +30,8 @@ public class SougouImgPipeline {
     private volatile AtomicInteger fails;
 
     public SougouImgPipeline() {
-        setPath("E:/pipeline/sougou");
+        BotConfig botConfig = SpringUtil.getBean(BotConfig.class);
+        setPath(botConfig.getWorkspace() + "/pipeline/sougou");
         suc = new AtomicInteger();
         fails = new AtomicInteger();
     }

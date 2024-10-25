@@ -12,6 +12,7 @@ import cn.hutool.cache.CacheUtil;
 import cn.hutool.cache.impl.TimedCache;
 import cn.zhouyafeng.itchat4j.beans.BaseMsg;
 import cn.zhouyafeng.itchat4j.utils.enums.MsgTypeEnum;
+import org.zhong.chatgpt.wechat.bot.util.CmdUtil;
 
 public class MsgPreProcessor implements MsgProcessor{
 
@@ -36,10 +37,10 @@ public class MsgPreProcessor implements MsgProcessor{
 
 		if(baseMsg.isGroupMsg()) {//群聊
 
-			if(!botConfig.getGroupWhiteList().contains(baseMsg.getGroupName())) {
-				//如果群聊不在白名单
-				return;
-			}
+//			if(!botConfig.getGroupWhiteList().contains(baseMsg.getGroupName())) {
+//				//如果群聊不在白名单
+// 				return;
+//			}
 			
 			if(!baseMsg.getContent().contains(botConfig.getAtBotName())) {
 				//如果不是@我的消息
@@ -53,10 +54,13 @@ public class MsgPreProcessor implements MsgProcessor{
 				WehchatMsgQueue.pushSendMsg(botMsg);
 				return;
 			}
+			//实现我的回复逻辑
+			CmdUtil.cmd(botMsg,"0");
 		}else {//私聊
 			
 			if(!botConfig.getUserWhiteList().isEmpty()
 					&& !botConfig.getUserWhiteList().contains(baseMsg.getFromUserNickName())) {
+
 				return;
 			}
 			
@@ -67,6 +71,8 @@ public class MsgPreProcessor implements MsgProcessor{
 				WehchatMsgQueue.pushSendMsg(botMsg);
 				return;
 			}
+			//实现我的回复逻辑
+			CmdUtil.cmd(botMsg,"1");
 		}
 		
 		
@@ -91,8 +97,8 @@ public class MsgPreProcessor implements MsgProcessor{
 				WehchatMsgQueue.pushSendMsg(botMsg);
 				return;
 			}
-			botMsg.setReplyMsg("无语了");
-			WehchatMsgQueue.pushReplyMsg(botMsg);
+
+
 			
 		}else {
 			botMsg.setReplyMsg("目前我只能针对文本消息进行回答");

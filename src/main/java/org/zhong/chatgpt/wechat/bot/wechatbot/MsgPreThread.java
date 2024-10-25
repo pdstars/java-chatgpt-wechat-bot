@@ -22,18 +22,23 @@ public class MsgPreThread implements Runnable {
 	@Override
 	public void run() {
 		for(;;) {
-			BotMsg botMsg = WehchatMsgQueue.popPreMsg();
-			if(botMsg == null) {
-				logger.debug("从preMsgs获取消息为空");
-				try {
-					Thread.sleep(500);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+			try{
+				BotMsg botMsg = WehchatMsgQueue.popPreMsg();
+				if(botMsg == null) {
+					logger.debug("从preMsgs获取消息为空");
+					try {
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}else {
+					logger.debug("从preMsgs获取消息:", JSON.toJSONString(botMsg));
+					msgProcessor.process(botMsg);
 				}
-			}else {
-				logger.debug("从preMsgs获取消息:", JSON.toJSONString(botMsg));
-				msgProcessor.process(botMsg);
+			} catch (Exception e){
+				e.printStackTrace();
 			}
+
 		}
 	}
 

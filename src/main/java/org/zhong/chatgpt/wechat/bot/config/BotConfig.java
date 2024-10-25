@@ -32,6 +32,9 @@ public class BotConfig {
 	private  int proxyPort = 0;
 	
 	private  Boolean proxyEnable = false;
+
+	@Value("${bot.workspace}")
+	private String   workspace;
 	
 	private  String dictPath = "classpath:dict.txt";
 	
@@ -116,15 +119,12 @@ public class BotConfig {
 	public  void setDictPath(String dictPath) {
 		this.dictPath = dictPath;
 	}
-	
-	
 
+	public String getWorkspace() {
+		return workspace;
+	}
 
-	
-	
-	
-	
-	
-	
-	
+	public void setWorkspace(String workspace) {
+		this.workspace = workspace;
+	}
 }

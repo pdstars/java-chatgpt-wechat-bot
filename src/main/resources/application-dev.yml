@@ -9,3 +9,4 @@ bot:
   openai.completio.frequency_penalty: 0.0
   openai.completio.presence_penalty: 0.6
   openai.completio.stop:
+  workspace: D:/botSpace
