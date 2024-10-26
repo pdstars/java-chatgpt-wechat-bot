@@ -1,9 +1,6 @@
 package org.zhong.chatgpt.wechat.bot.config;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.yaml.snakeyaml.Yaml;
 import org.zhong.chatgpt.wechat.bot.consts.BotConst;
 
@@ -54,9 +52,15 @@ public class BotConfig {
 
 	public  List<String> getGroupWhiteList() {
 		if(groupWhiteList.size() == 0){
-			String groupWhiteListUrl = ResourceUtil.getResource("groupWhiteList.txt").getPath();
-			FileReader groupFileReader = new FileReader(groupWhiteListUrl);
-			groupWhiteList = groupFileReader.readLines();
+			InputStream in = this.getClass().getResourceAsStream("/groupWhiteList.txt");
+			try (BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
+				String line;
+				while ((line = reader.readLine()) != null) {
+					groupWhiteList.add(line);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		return groupWhiteList;
 	}
