@@ -2,6 +2,8 @@ package org.zhong.chatgpt.wechat.bot.msgprocess;
 
 import cn.hutool.extra.spring.SpringUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zhong.chatgpt.wechat.bot.config.BotConfig;
 import org.zhong.chatgpt.wechat.bot.consts.BotConst;
 import org.zhong.chatgpt.wechat.bot.model.BotMsg;
@@ -13,11 +15,12 @@ import cn.hutool.cache.impl.TimedCache;
 import cn.zhouyafeng.itchat4j.beans.BaseMsg;
 import cn.zhouyafeng.itchat4j.utils.enums.MsgTypeEnum;
 import org.zhong.chatgpt.wechat.bot.util.CmdUtil;
+import org.zhong.chatgpt.wechat.bot.util.TianGProcessor;
 
 public class MsgPreProcessor implements MsgProcessor{
 
 	TimedCache<String, String> timedCache = CacheUtil.newTimedCache(20*60*1000);
-	
+	private static Logger LOG = LoggerFactory.getLogger(MsgPreProcessor.class);
 	public void process(BotMsg botMsg) {
 		BotConfig botConfig = SpringUtil.getBean(BotConfig.class);
 		BaseMsg baseMsg = botMsg.getBaseMsg();
@@ -36,11 +39,13 @@ public class MsgPreProcessor implements MsgProcessor{
 		}
 
 		if(baseMsg.isGroupMsg()) {//群聊
-
-//			if(!botConfig.getGroupWhiteList().contains(baseMsg.getGroupName())) {
-//				//如果群聊不在白名单
-// 				return;
-//			}
+			//为了调试日志，在此记录
+			LOG.info(String.format("收到群聊信息【%s】",botMsg.getBaseMsg().getText()));
+			LOG.info(String.format("群聊名称是【%s】",botMsg.getBaseMsg().getGroupName()));
+			if(!botConfig.getGroupWhiteList().contains(baseMsg.getGroupName())) {
+				//如果群聊不在白名单
+ 				return;
+			}
 			
 			if(!baseMsg.getContent().contains(botConfig.getAtBotName())) {
 				//如果不是@我的消息
@@ -93,7 +98,6 @@ public class MsgPreProcessor implements MsgProcessor{
 				}else {
 					botMsg.setReplyMsg("你说的话太内涵，我无法回答。");
 				}
-				
 				WehchatMsgQueue.pushSendMsg(botMsg);
 				return;
 			}

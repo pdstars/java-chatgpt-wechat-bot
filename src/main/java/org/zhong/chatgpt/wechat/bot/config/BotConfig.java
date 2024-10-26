@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import cn.hutool.core.io.resource.ResourceUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -52,6 +53,11 @@ public class BotConfig {
 	}
 
 	public  List<String> getGroupWhiteList() {
+		if(groupWhiteList.size() == 0){
+			String groupWhiteListUrl = ResourceUtil.getResource("groupWhiteList.txt").getPath();
+			FileReader groupFileReader = new FileReader(groupWhiteListUrl);
+			groupWhiteList = groupFileReader.readLines();
+		}
 		return groupWhiteList;
 	}
 

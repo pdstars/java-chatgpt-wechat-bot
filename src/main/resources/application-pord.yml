@@ -10,3 +10,4 @@ bot:
   openai.completio.presence_penalty: 0.6
   openai.completio.stop:
   workspace: /usr/local/bot
+  apikey: 0abfd5005885953a328d93d2355bbb77

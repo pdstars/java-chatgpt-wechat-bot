@@ -5,6 +5,8 @@ spring:
     hibernate.ddl-auto: none
     show-sql: true
 
-
   profiles:
-    active: pord
+    active: dev
+
+server:
+  port: 4433
