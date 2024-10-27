@@ -104,6 +104,7 @@ public class NewsProcessor {
             String filePath = workspace + "/news/" + date + "/new.txt";
             content = new String(Files.readAllBytes(Paths.get(filePath)), StandardCharsets.UTF_8);
             content = content.replaceAll("<br/><br/>","\n");
+            content = content.replaceAll("<br/>","\n");
         } catch (Exception e){
             e.printStackTrace();
         }
