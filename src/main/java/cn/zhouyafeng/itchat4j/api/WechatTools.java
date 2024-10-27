@@ -106,6 +106,18 @@ public class WechatTools {
 	}
 
 	/**
+	 * 根据群名返回群id
+	 */
+	public static String getGroupIdByNickName(String nickName){
+		for (JSONObject o :getGroupList()) {
+			if (o.getString("NickName").equals(nickName)) {
+				return o.getString("UserName");
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * 获取群ID列表
 	 * 
 	 * @date 2017年6月21日 下午11:42:56

@@ -6,7 +6,7 @@ spring:
     show-sql: true
 
   profiles:
-    active: dev
+    active: pord
 
 server:
   port: 4433

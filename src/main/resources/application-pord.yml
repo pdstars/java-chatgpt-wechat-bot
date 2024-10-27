@@ -11,3 +11,5 @@ bot:
   openai.completio.stop:
   workspace: /usr/local/bot
   apikey: 0abfd5005885953a328d93d2355bbb77
+  #获取新闻的群聊
+  newsgroup: 每日微语报读者3群

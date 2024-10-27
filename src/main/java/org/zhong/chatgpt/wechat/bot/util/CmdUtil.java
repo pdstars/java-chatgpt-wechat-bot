@@ -50,10 +50,15 @@ public class CmdUtil {
                     int random = (int)(Math.random() * files.length);
                     MessageTools.sendPicMsgByUserId(botMsg.getBaseMsg().getFromUserName(),files[random].getPath());
                 }
-                if(cmd.equals((CMDConst.TIANGOU))){
+                if(cmd.equals(CMDConst.TIANGOU)){
                     TianGProcessor tianGProcessor = SpringUtil.getBean(TianGProcessor.class);
                     String replyText = tianGProcessor.process();
                     MessageTools.sendMsgById(replyText,botMsg.getBaseMsg().getFromUserName());
+                }
+                if(cmd.equals(CMDConst.NEWS)){
+                    NewsProcessor newsProcessor = SpringUtil.getBean(NewsProcessor.class);
+                    String content = newsProcessor.getNewsContent();
+                    MessageTools.sendMsgById(content,botMsg.getBaseMsg().getFromUserName());
                 }
             }
         }
