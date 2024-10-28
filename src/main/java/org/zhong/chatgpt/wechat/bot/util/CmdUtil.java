@@ -5,6 +5,7 @@ import cn.zhouyafeng.itchat4j.api.MessageTools;
 import org.zhong.chatgpt.wechat.bot.config.BotConfig;
 import org.zhong.chatgpt.wechat.bot.consts.BotConst;
 import org.zhong.chatgpt.wechat.bot.consts.CMDConst;
+import org.zhong.chatgpt.wechat.bot.game.TwoOnePointGame;
 import org.zhong.chatgpt.wechat.bot.model.BotMsg;
 import org.zhong.chatgpt.wechat.bot.model.WehchatMsgQueue;
 
@@ -30,13 +31,12 @@ public class CmdUtil {
         for(String cmd : cmdKey.keySet()){
             if((type.equals("0") && text.contains(botConfig.getAtBotName() + " " +cmd)) || (type.equals("1") &&text.contains(cmd))){
                 if(cmd.equals(CMDConst.HELP)){
-                    result = "--------------\n";
+                    result = "============\n";
                     for(String cmd2 : cmdKey.keySet()){
-                        result = result + cmd2 + ":" + cmdKey.get(cmd2) + "\n";
+                        result = result + cmd2 + "\n";
                     }
-                    result = result + "--------------";
-                    botMsg.setReplyMsg(result);
-                    WehchatMsgQueue.pushSendMsg(botMsg);
+                    result = result + "============";
+                    MessageTools.sendMsgById(result,botMsg.getBaseMsg().getFromUserName());
                 }
                 if(cmd.equals(CMDConst.PIC)){
                     String query = text.split(" ")[1];
@@ -58,6 +58,12 @@ public class CmdUtil {
                 if(cmd.equals(CMDConst.NEWS)){
                     NewsProcessor newsProcessor = SpringUtil.getBean(NewsProcessor.class);
                     String content = newsProcessor.getNewsContent();
+                    MessageTools.sendMsgById(content,botMsg.getBaseMsg().getFromUserName());
+                }
+                if(cmd.equals(CMDConst.TWOONE)){
+                    TwoOnePointGame game = SpringUtil.getBean(TwoOnePointGame.class);
+                    game.ready(botMsg);
+                    String content = "游戏已开始，请@我发送加入，以加入游戏";
                     MessageTools.sendMsgById(content,botMsg.getBaseMsg().getFromUserName());
                 }
             }

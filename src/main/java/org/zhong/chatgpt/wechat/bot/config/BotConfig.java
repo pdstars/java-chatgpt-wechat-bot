@@ -33,13 +33,10 @@ public class BotConfig {
 	private  Boolean proxyEnable = false;
 
 	@Value("${bot.workspace}")
-	private String   workspace;
+	private String workspace;
 	
 	private  String dictPath = "classpath:dict.txt";
-	
-	private  List<String> groupWhiteList = new ArrayList<String>(); 
-	
-	private  List<String> userWhiteList = new ArrayList<String>(); 
+
 
 	
 	public  String getBotName() {
@@ -51,23 +48,30 @@ public class BotConfig {
 	}
 
 	public  List<String> getGroupWhiteList() {
-		if(groupWhiteList.size() == 0){
-			InputStream in = this.getClass().getResourceAsStream("/groupWhiteList.txt");
-			try (BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
-				String line;
-				while ((line = reader.readLine()) != null) {
-					groupWhiteList.add(line);
-				}
-			} catch (IOException e) {
+		InputStream in = null;
+		List<String> groupWhiteList = new ArrayList<>();
+		//获取配置文件路径
+		try  {
+			String configPath = workspace + "/config/groupWhiteList.txt";
+			in = new FileInputStream(new File(configPath));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+			String line;
+
+			while ((line = reader.readLine()) != null) {
+				groupWhiteList.add(line);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}finally {
+			try{
+				in.close();
+			}catch (IOException e){
 				e.printStackTrace();
 			}
 		}
 		return groupWhiteList;
 	}
 
-	public  void setGroupWhiteList(List<String> groupWhiteList) {
-		this.groupWhiteList = groupWhiteList;
-	}
 
 	public  String getAtBotName() {
 		return BotConst.AT+botName;
@@ -83,12 +87,30 @@ public class BotConfig {
 	}
 
 	public  List<String> getUserWhiteList() {
+		InputStream in = null;
+		List<String> userWhiteList = new ArrayList<>();
+		//获取配置文件路径
+		try  {
+			String configPath = workspace + "/config/userWhiteList.txt";
+			in = new FileInputStream(new File(configPath));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+			String line;
+
+			while ((line = reader.readLine()) != null) {
+				userWhiteList.add(line);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}finally {
+			try{
+				in.close();
+			}catch (IOException e){
+				e.printStackTrace();
+			}
+		}
 		return userWhiteList;
 	}
 
-	public  void setUserWhiteList(List<String> userWhiteList) {
-		this.userWhiteList = userWhiteList;
-	}
 
 	public  String getQrcodePath() {
 		return qrcodePath;

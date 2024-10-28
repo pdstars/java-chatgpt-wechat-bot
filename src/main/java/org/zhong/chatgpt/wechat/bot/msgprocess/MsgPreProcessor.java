@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zhong.chatgpt.wechat.bot.config.BotConfig;
 import org.zhong.chatgpt.wechat.bot.consts.BotConst;
+import org.zhong.chatgpt.wechat.bot.game.TwoOnePointGame;
 import org.zhong.chatgpt.wechat.bot.model.BotMsg;
 import org.zhong.chatgpt.wechat.bot.model.WehchatMsgQueue;
 import org.zhong.chatgpt.wechat.bot.sensitive.SensitiveWord;
@@ -54,7 +55,8 @@ public class MsgPreProcessor implements MsgProcessor{
 				//如果不是@我的消息
 				return;
 			}
-			
+			TwoOnePointGame game = SpringUtil.getBean(TwoOnePointGame.class);
+			game.process(botMsg);
 			long count = WehchatMsgQueue.countGroupUserPreMsg(baseMsg.getGroupUserName());
 			if(count > 10) {
 				timedCache.put(baseMsg.getGroupUserName(), baseMsg.getGroupUserName());
