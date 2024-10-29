@@ -62,8 +62,8 @@ public class CmdUtil {
                 }
                 if(cmd.equals(CMDConst.TWOONE)){
                     TwoOnePointGame game = SpringUtil.getBean(TwoOnePointGame.class);
-                    game.ready(botMsg);
-                    String content = "游戏已开始，请@我发送加入，以加入游戏";
+                    game.startGame(botMsg);
+                    String content = "游戏开始，请选择发牌或者结算";
                     MessageTools.sendMsgById(content,botMsg.getBaseMsg().getFromUserName());
                 }
             }

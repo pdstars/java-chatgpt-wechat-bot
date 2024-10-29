@@ -13,3 +13,5 @@ bot:
   apikey: 0abfd5005885953a328d93d2355bbb77
   #获取新闻的群聊
   newsgroup: 测试小组
+server:
+  port: 4433

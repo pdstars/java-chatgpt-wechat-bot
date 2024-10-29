@@ -14,6 +14,7 @@ import java.util.*;
 public class TwoOnePointGame extends  GameAbstrat{
     private Map<String, Map<String, List<Integer>>> gameData = new HashMap();
 
+    private Map<String,String> userData = new HashMap<>();
     /**
      * 记录每个群的状态 1是游戏中，0是准备中
      */
@@ -28,13 +29,12 @@ public class TwoOnePointGame extends  GameAbstrat{
     @Override
     public void startGame(BotMsg botMsg) {
         BaseMsg baseMsg = botMsg.getBaseMsg();
+        this.ready(botMsg);
         Map<String,List<Integer>> map = gameData.get(baseMsg.getGroupName());
-        if(map.size() == 0){
-            String content = "当前玩家数量少于1，不可开始游戏";
-            MessageTools.sendMsgById(content,WechatTools.getGroupIdByNickName(baseMsg.getGroupName()));
-            return;
-        }
+        map.put(botMsg.getBaseMsg().getGroupUserNickName(),new ArrayList<>());
+        map.put("庄家",new ArrayList<>());
         flagMap.put(baseMsg.getGroupName(),"1");
+        userData.put(baseMsg.getGroupName(),botMsg.getBaseMsg().getGroupUserNickName());
     }
 
     @Override
@@ -51,80 +51,97 @@ public class TwoOnePointGame extends  GameAbstrat{
         if(!this.checkGame(baseMsg.getGroupName())){
             return;
         }
-
         String text = baseMsg.getText();
-        this.ready(botMsg);
-        if((botConfig.getAtBotName() +" 开始").equals(text)){
-            String flag = flagMap.get(baseMsg.getGroupName());
-            if("0".equals(flag)){
-                this.startGame(botMsg);
-            } else {
-                String content = "只有准备状态才能开始游戏";
-                MessageTools.sendMsgById(content,WechatTools.getGroupIdByNickName(baseMsg.getGroupName()));
-            }
-
-        } else if((botConfig.getAtBotName() +" 发牌").equals(text)){
+        if((botConfig.getAtBotName() +" 发牌").equals(text) || (botConfig.getAtBotName() +" 发牌").equals(text)){
             //发牌逻辑
             Random random = new Random();
             Map<String,List<Integer>> map = gameData.get(baseMsg.getGroupName());
-            Set<String> keys = map.keySet();
-            for(String key: keys){
-                Integer integer = random.nextInt(11);
-                List<Integer> list = map.get(key);
-                list.add(integer);
-            }
-            this.isFinsh(baseMsg);
+            String user = userData.get(baseMsg.getGroupName());
+            map.get(user).add(random.nextInt(10) + 1);
+            map.get("庄家").add(random.nextInt(10) + 1);
+            this.sendNowData(baseMsg);
 
-        }else if((botConfig.getAtBotName() +" 加入").equals(text)){
-            String flag = flagMap.get(baseMsg.getGroupName());
-            //准备阶段才能加入
-            if("0".equals(flag)){
-                Map<String,List<Integer>> map = gameData.get(baseMsg.getGroupName());
-                map.put(baseMsg.getGroupUserNickName(),new ArrayList<>());
-                String content = "加入成功";
-                MessageTools.sendMsgById(content,WechatTools.getGroupIdByNickName(baseMsg.getGroupName()));
-            } else {
-                String content = "当前阶段不允许加入";
-                MessageTools.sendMsgById(content,WechatTools.getGroupIdByNickName(baseMsg.getGroupName()));
-            }
-
-        }else if((botConfig.getAtBotName() +" 退出").equals(text)){
+        }else if((botConfig.getAtBotName() +" 退出").equals(text) || (botConfig.getAtBotName() +" 退出").equals(text)){
             this.endGame(baseMsg);
             String content = "退出成功";
             MessageTools.sendMsgById(content,WechatTools.getGroupIdByNickName(baseMsg.getGroupName()));
+            return;
+        } else if((botConfig.getAtBotName() +" 结算").equals(text) || (botConfig.getAtBotName() +" 结算").equals(text)){
+
+            //这里判断胜利条件
+            this.isFinsh(baseMsg);
         }
 
 
     }
 
+    /**
+     * 判断胜利条件
+     * @param baseMsg
+     */
     public void isFinsh(BaseMsg baseMsg){
         Map<String,List<Integer>> map = gameData.get(baseMsg.getGroupName());
-        Set<String> keys = map.keySet();
-        String content = "============\n";
-        for(String key: keys){
-            List<Integer> list = map.get(key);
-            Integer result = 0;
-            content = content + key + ": ,";
-            for(Integer i: list){
-                result = result + i;
-                content = content + "," + i;
-            }
-            content = content + "\n";
-
-        }
-        MessageTools.sendMsgById(content,WechatTools.getGroupIdByNickName(baseMsg.getGroupName()));
-    }
-
-    public void ready(BotMsg botMsg){
-        BaseMsg baseMsg = botMsg.getBaseMsg();
-        String flag = flagMap.get(baseMsg.getGroupName());
-
-        if(!this.checkGame(baseMsg.getGroupName())){
-            flag = "0";
-        }
-        if(!"0".equals(flag)){
+        List<Integer> zj = map.get("庄家");
+        String user = userData.get(baseMsg.getGroupName());
+        List<Integer> wj = map.get(user);
+        if(getSum(wj) == 21){
+            MessageTools.sendMsgById("你赢了",WechatTools.getGroupIdByNickName(baseMsg.getGroupName()));
+            this.endGame(baseMsg);
             return;
         }
+        if(getSum(wj) > 21){
+            MessageTools.sendMsgById("你输了",WechatTools.getGroupIdByNickName(baseMsg.getGroupName()));
+            this.endGame(baseMsg);
+            return;
+        }
+
+        if(21 - getSum(zj) > 5){
+            while(true){
+                Random random = new Random();
+                map.get("庄家").add(random.nextInt(10) + 1);
+                zj = map.get("庄家");
+                this.sendNowData(baseMsg);
+                if((getSum(zj) > 21) && (21 - getSum(zj)) < 5){
+                    break;
+                }
+            }
+        }
+        if(getSum(zj) > 21){
+            MessageTools.sendMsgById("你赢了",WechatTools.getGroupIdByNickName(baseMsg.getGroupName()));
+            this.endGame(baseMsg);
+            return;
+        }
+        //如果都没超过21
+        Integer wj21 = 21 - getSum(wj);
+        Integer zj21 = 21 - getSum(zj);
+        if(wj21 < zj21){
+            MessageTools.sendMsgById("你赢了",WechatTools.getGroupIdByNickName(baseMsg.getGroupName()));
+            this.endGame(baseMsg);
+            return;
+        } else {
+            MessageTools.sendMsgById("你输了",WechatTools.getGroupIdByNickName(baseMsg.getGroupName()));
+            this.endGame(baseMsg);
+            return;
+        }
+    }
+
+    /**
+     * 打印当前群组的牌点
+     * @param baseMsg
+     */
+    public void sendNowData(BaseMsg baseMsg){
+        StringBuilder sb = new StringBuilder();
+        Map<String,List<Integer>> map = gameData.get(baseMsg.getGroupName());
+        sb.append( "============\n");
+        sb.append("庄家手牌: " + map.get("庄家").toString() + "\n");
+        String user = userData.get(baseMsg.getGroupName());
+        sb.append(user + "手牌" + map.get(user).toString() + "\n");
+        sb.append("请选择是发牌还是结算\n");
+        sb.append( "============\n");
+        MessageTools.sendMsgById(sb.toString(),WechatTools.getGroupIdByNickName(baseMsg.getGroupName()));
+    }
+    public void ready(BotMsg botMsg){
+        BaseMsg baseMsg = botMsg.getBaseMsg();
         if(flagMap.get(baseMsg.getGroupName()) == null){
             flagMap.put(baseMsg.getGroupName(),"0");
         }
@@ -145,5 +162,13 @@ public class TwoOnePointGame extends  GameAbstrat{
             return false;
         }
         return true;
+    }
+
+    public Integer getSum(List<Integer> list){
+        Integer sum = 0;
+        for(Integer i: list){
+            sum = sum + i;
+        }
+        return sum;
     }
 }

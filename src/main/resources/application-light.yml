@@ -14,4 +14,4 @@ bot:
   #获取新闻的群聊
   newsgroup: 每日微语报读者3群
 server:
-  port: 4433
+  port: 4400
