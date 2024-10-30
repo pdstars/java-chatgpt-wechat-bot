@@ -172,6 +172,16 @@
 			<artifactId>service</artifactId>
 			<version>0.11.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.23</version> <!-- 请替换为最新版本号 -->
+		</dependency>
 		<!-- <dependency> <groupId>com.theokanning.openai-gpt3-java</groupId> <artifactId>api</artifactId> 
 			<version>0.9.0</version> <scope>compile</scope> </dependency> <dependency> 
 			<groupId>com.squareup.retrofit2</groupId> <artifactId>retrofit</artifactId> 
@@ -225,10 +235,8 @@
 									<extraArgument>-Xms512M</extraArgument>
 									<extraArgument>-Xmx512M</extraArgument>
 									<extraArgument>-Xss512k</extraArgument>
-									<extraArgument>-Xloggc:@BASEDIR@/logs/chatgpt-wechat-bot_gc.log</extraArgument>
 									<extraArgument>-verbose:gc</extraArgument>
 									<extraArgument>-XX:+HeapDumpOnOutOfMemoryError</extraArgument>
-									<extraArgument>-XX:HeapDumpPath=@BASEDIR@/logs/java_heapdump.hprof</extraArgument>
 								</extraArguments>
 							</jvmSettings>
 						</program>
