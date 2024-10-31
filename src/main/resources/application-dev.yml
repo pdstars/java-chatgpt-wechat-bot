@@ -15,3 +15,17 @@ bot:
   newsgroup: 测试小组
 server:
   port: 4433
+
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+
+  datasource:
+    url: jdbc:mysql://107.151.239.215:3306/chat?useSSL=false&serverTimezone=UTC
+    username: root
+    password: 5795583
+
+  jpa:
+    hibernate.ddl-auto: update
+    show-sql: true

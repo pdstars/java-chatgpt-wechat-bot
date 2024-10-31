@@ -37,6 +37,8 @@ public class Core {
 		return instance;
 	}
 
+
+
 	boolean alive = false;
 	private int memberCount = 0;
 
@@ -89,6 +91,12 @@ public class Core {
 		};
 	}
 
+
+	public void clear(){
+		memberList.clear();
+		groupIdList.clear();
+
+	}
 	public boolean isAlive() {
 		return alive;
 	}
