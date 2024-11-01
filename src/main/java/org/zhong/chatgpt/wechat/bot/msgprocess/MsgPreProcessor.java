@@ -74,13 +74,13 @@ public class MsgPreProcessor implements MsgProcessor{
 				return;
 			}
 			
-			long count = WehchatMsgQueue.countUserPreMsg(baseMsg.getFromUserName());
-			if(count > 10) {
-				timedCache.put(baseMsg.getFromUserName(), baseMsg.getFromUserName());
-				botMsg.setReplyMsg("你说话太快，接下来的10分钟我不会再处理你的新消息");
-				WehchatMsgQueue.pushSendMsg(botMsg);
-				return;
-			}
+//			long count = WehchatMsgQueue.countUserPreMsg(baseMsg.getFromUserName());
+//			if(count > 10) {
+//				timedCache.put(baseMsg.getFromUserName(), baseMsg.getFromUserName());
+//				botMsg.setReplyMsg("你说话太快，接下来的10分钟我不会再处理你的新消息");
+//				WehchatMsgQueue.pushSendMsg(botMsg);
+//				return;
+//			}
 			//实现我的回复逻辑
 			CmdUtil.cmd(botMsg,"1");
 		}
@@ -108,7 +108,7 @@ public class MsgPreProcessor implements MsgProcessor{
 			}
 
 
-			
+			WehchatMsgQueue.pushReplyMsg(botMsg);
 		}else {
 			botMsg.setReplyMsg("目前我只能针对文本消息进行回答");
 			WehchatMsgQueue.pushSendMsg(botMsg);

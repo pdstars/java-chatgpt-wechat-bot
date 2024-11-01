@@ -34,7 +34,7 @@ public class ApiController {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Bot.buildChatGPTWechatBot().start();
+                Bot.buildMyAiWehatBot().start();
             }
         }).start();
 

@@ -33,14 +33,6 @@ public class MsgReplyThread implements Runnable {
 			}else {
 				logger.debug("从waitReplyMsgs获取消息:{}", JSON.toJSONString(botMsg));
 				msgProcessor.process(botMsg);
-				
-				try {
-					Thread.sleep(10000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
 			}
 		}
 		 

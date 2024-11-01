@@ -1,16 +1,6 @@
 package org.zhong.chatgpt.wechat.bot.model;
 
-import org.zhong.chatgpt.wechat.bot.msgprocess.ACSAcceptor;
-import org.zhong.chatgpt.wechat.bot.msgprocess.ACSSendProcessor;
-import org.zhong.chatgpt.wechat.bot.msgprocess.ChatGPTReplyProcessor;
-import org.zhong.chatgpt.wechat.bot.msgprocess.ConsoleSendProcessor;
-import org.zhong.chatgpt.wechat.bot.msgprocess.ConsoleMsgAcceptor;
-import org.zhong.chatgpt.wechat.bot.msgprocess.MsgAcceptor;
-import org.zhong.chatgpt.wechat.bot.msgprocess.MsgPreProcessor;
-import org.zhong.chatgpt.wechat.bot.msgprocess.MsgProcessor;
-import org.zhong.chatgpt.wechat.bot.msgprocess.OpenAIReplyProcessor;
-import org.zhong.chatgpt.wechat.bot.msgprocess.WechatMsgAcceptor;
-import org.zhong.chatgpt.wechat.bot.msgprocess.WechatSendProcessor;
+import org.zhong.chatgpt.wechat.bot.msgprocess.*;
 import org.zhong.chatgpt.wechat.bot.wechatbot.MsgPreThread;
 import org.zhong.chatgpt.wechat.bot.wechatbot.MsgReplyThread;
 import org.zhong.chatgpt.wechat.bot.wechatbot.WechatSendThread;
@@ -23,8 +13,8 @@ public class Bot {
 	private MsgAcceptor msgAcceptor;
 	
 	public void start() {
-		MsgReplyThread.start(replyProcessor);
 		MsgPreThread.start(msgPreProcessor);
+		MsgReplyThread.start(replyProcessor);
 		WechatSendThread.start(sendProcessor);
 		msgAcceptor.start();
 	}
@@ -45,6 +35,14 @@ public class Bot {
 		return builder()
 				.msgPreProcessor(new MsgPreProcessor())
 				.replyProcessor(new ChatGPTReplyProcessor())
+				.sendProcessor(new WechatSendProcessor())
+				.msgAcceptor(new WechatMsgAcceptor());
+	}
+
+	public static Bot buildMyAiWehatBot() {
+		return builder()
+				.msgPreProcessor(new MsgPreProcessor())
+				.replyProcessor(new MyAiReplyProessor())
 				.sendProcessor(new WechatSendProcessor())
 				.msgAcceptor(new WechatMsgAcceptor());
 	}

@@ -35,14 +35,6 @@ public class WechatSendThread implements Runnable {
 			}else {
 				logger.debug("从waitSendMsgs获取消息:{}", JSON.toJSONString(botMsg));
 				msgProcessor.process(botMsg);
-				
-				try {
-					int sleep = RandomUtil.randomInt(5, 20);
-					Thread.sleep(sleep * 1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 			}
 		}
 		
