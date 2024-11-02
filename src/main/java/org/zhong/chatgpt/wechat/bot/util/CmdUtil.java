@@ -31,11 +31,11 @@ public class CmdUtil {
         for(String cmd : cmdKey.keySet()){
             if((type.equals("0") && text.contains(botConfig.getAtBotName() + " " +cmd)) || (type.equals("1") &&text.contains(cmd))){
                 if(cmd.equals(CMDConst.HELP)){
-                    result = "============\n";
+                    result = "=====指令大全=====\n";
                     for(String cmd2 : cmdKey.keySet()){
                         result = result + cmd2 + "\n";
                     }
-                    result = result + "============";
+                    result = result + "===============";
                     MessageTools.sendMsgById(result,botMsg.getBaseMsg().getFromUserName());
                 }
                 if(cmd.equals(CMDConst.PIC)){

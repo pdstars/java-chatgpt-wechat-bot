@@ -4,19 +4,21 @@ import cn.hutool.core.io.FileUtil;
 import cn.zhouyafeng.itchat4j.beans.BaseMsg;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Component;
+import org.zhong.chatgpt.wechat.bot.Repository.IdiomRepository;
 import org.zhong.chatgpt.wechat.bot.config.BotConfig;
+import org.zhong.chatgpt.wechat.bot.entity.Idiom;
 import org.zhong.chatgpt.wechat.bot.model.BotMsg;
+import org.zhong.chatgpt.wechat.bot.model.BotMsgLinkedList;
+import org.zhong.chatgpt.wechat.bot.model.WehchatMsgQueue;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 @Component
-public class JieLongTGame extends GameAbstrat{
+public class JieLongTGame{
     private Map<String, Map<String,Integer>> gameData = new HashMap();
 
     /**
@@ -25,35 +27,45 @@ public class JieLongTGame extends GameAbstrat{
     private Map<String,String> flagMap = new HashMap<>();
 
     private JSONObject works = new JSONObject();
+
     @Autowired
     BotConfig botConfig;
 
+    @Autowired
+    IdiomRepository idiomRepository;
 
 
-    @Override
+
     public void startGame(BotMsg botMsg) {
         BaseMsg baseMsg = botMsg.getBaseMsg();
         //开始游戏
         flagMap.put(baseMsg.getGroupName(),"1");
     }
 
-    @Override
     public void endGame(BaseMsg baseMsg) {
         //游戏结束逻辑
         this.gameData.remove(baseMsg.getGroupName());
         this.flagMap.remove(baseMsg.getGroupName());
     }
 
-    @Override
+    @PostConstruct
     public void process(BotMsg botMsg) {
-        BaseMsg baseMsg = botMsg.getBaseMsg();
-        if(!this.checkGame(baseMsg.getGroupName())){
-            return;
-        }
-        String text = baseMsg.getText();
-        if((botConfig.getAtBotName() +" 发牌").equals(text) || (botConfig.getAtBotName() +" 发牌").equals(text)){
-            //发牌逻辑
+        for(;;){
+            try{
+                BaseMsg baseMsg = botMsg.getBaseMsg();
+                String groupName = baseMsg.getGroupName();
 
+                // 获取文本
+                String text = baseMsg.getContent();
+                text = text.replaceAll(" ","").replaceAll(" ","");
+                Idiom idiom = new Idiom();
+                idiom.setWord(text);
+                Example<Idiom> example = Example.of(idiom);
+                Optional<Idiom> result = idiomRepository.findOne(example);
+                System.out.println(result);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
 
         }
 
@@ -70,5 +82,19 @@ public class JieLongTGame extends GameAbstrat{
             return false;
         }
         return true;
+    }
+
+    public void setGameMagLinkList(BotMsg botMsg) throws InterruptedException {
+        BaseMsg baseMsg = botMsg.getBaseMsg();
+        String text = baseMsg.getContent();
+        text = text.replaceAll(" ","").replaceAll(" ","");
+        if("成语接龙".equals(text)){
+            this.startGame(botMsg);
+        } else if(!checkGame(baseMsg.getGroupName())){
+            return;
+        }
+
+        //判断此群组名的
+        this.process(botMsg);
     }
 }

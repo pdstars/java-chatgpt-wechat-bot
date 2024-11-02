@@ -15,7 +15,6 @@ import cn.hutool.cache.CacheUtil;
 import cn.hutool.cache.impl.TimedCache;
 import cn.zhouyafeng.itchat4j.beans.BaseMsg;
 import cn.zhouyafeng.itchat4j.utils.enums.MsgTypeEnum;
-import org.zhong.chatgpt.wechat.bot.util.CmdUtil;
 import org.zhong.chatgpt.wechat.bot.util.NewsProcessor;
 import org.zhong.chatgpt.wechat.bot.util.TianGProcessor;
 
@@ -55,8 +54,8 @@ public class MsgPreProcessor implements MsgProcessor{
 				//如果不是@我的消息
 				return;
 			}
-			TwoOnePointGame game = SpringUtil.getBean(TwoOnePointGame.class);
-			game.process(botMsg);
+//			TwoOnePointGame game = SpringUtil.getBean(TwoOnePointGame.class);
+//			game.process(botMsg);
 			long count = WehchatMsgQueue.countGroupUserPreMsg(baseMsg.getGroupUserName());
 			if(count > 10) {
 				timedCache.put(baseMsg.getGroupUserName(), baseMsg.getGroupUserName());
@@ -65,7 +64,7 @@ public class MsgPreProcessor implements MsgProcessor{
 				return;
 			}
 			//实现我的回复逻辑
-			CmdUtil.cmd(botMsg,"0");
+		//	CmdUtil.cmd(botMsg,"0");
 		}else {//私聊
 			
 			if(!botConfig.getUserWhiteList().isEmpty()
@@ -82,7 +81,7 @@ public class MsgPreProcessor implements MsgProcessor{
 //				return;
 //			}
 			//实现我的回复逻辑
-			CmdUtil.cmd(botMsg,"1");
+//			CmdUtil.cmd(botMsg,"1");
 		}
 		
 		
