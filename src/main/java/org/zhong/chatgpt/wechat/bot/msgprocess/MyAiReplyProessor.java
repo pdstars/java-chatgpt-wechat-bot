@@ -13,9 +13,12 @@ import org.zhong.chatgpt.wechat.bot.util.SougouImgProcessor;
 import org.zhong.chatgpt.wechat.bot.util.TianGProcessor;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Map;
 
 public class MyAiReplyProessor implements MsgProcessor{
+
+    Map<String,JieLongTGame> jieLongTGameMap = new HashMap<>();
     @Override
     public void process(BotMsg botMsg) {
         try{
@@ -60,18 +63,28 @@ public class MyAiReplyProessor implements MsgProcessor{
                         String content = newsProcessor.getNewsContent();
                         MessageTools.sendMsgById(content, botMsg.getBaseMsg().getFromUserName());
                     }
-                    if (cmd.equals(CMDConst.TWOONE)) {
-                        TwoOnePointGame game = SpringUtil.getBean(TwoOnePointGame.class);
-                        game.startGame(botMsg);
-                        String content = "游戏开始，请选择发牌或者结算";
-                        MessageTools.sendMsgById(content, botMsg.getBaseMsg().getFromUserName());
-                    }
                 }
             }
 
             if(baseMsg.isGroupMsg()){
-                JieLongTGame jieLongTGame = SpringUtil.getBean(JieLongTGame.class);
-                jieLongTGame.setGameMagLinkList(botMsg);
+                String content = baseMsg.getContent();
+                content = content.replaceAll(" ","").replaceAll(" ","");
+                if("成语接龙".equals(content)){
+                    JieLongTGame jieLongTGame = jieLongTGameMap.get(baseMsg.getGroupName());
+                    if(jieLongTGame == null){
+                        jieLongTGame = new JieLongTGame(baseMsg.getGroupName());
+                        new Thread(jieLongTGame).start();
+                    }
+                    jieLongTGame.startGame(botMsg);
+                } else {
+                    JieLongTGame jieLongTGame = jieLongTGameMap.get(baseMsg.getGroupName());
+                    if(jieLongTGame == null){
+                        return;
+                    }
+                    jieLongTGame.setGameMagLinkList(botMsg);
+                }
+
+
             }
         }catch (Exception e){
             e.printStackTrace();

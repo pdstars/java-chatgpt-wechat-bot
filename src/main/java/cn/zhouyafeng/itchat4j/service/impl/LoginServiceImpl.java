@@ -280,7 +280,7 @@ public class LoginServiceImpl implements ILoginService {
 											core.getMsgList().add(baseMsg);
 										}
 									} catch (Exception e) {
-										LOG.info(e.getMessage());
+										e.printStackTrace();
 									}
 								}
 							} else if (selector.equals("7")) {

@@ -12,30 +12,30 @@ public class Idiom {
     @Id
     private Long id;
 
-    @Column
+    @Column(name = "derivation")
     private String derivation;
 
-    @Column
+    @Column(name = "example")
     private String example;
 
 
-    @Column
+    @Column(name = "explanation")
     private String explanation;
 
-    @Column
+    @Column(name = "pinyin")
     private String pinyin;
 
-    @Column
+    @Column(name = "word")
     private String word;
 
-    @Column
+    @Column(name = "abbreviation")
     private String abbreviation;
 
-    @Column
+    @Column(name = "pinyin_r")
     private String pinyin_r;
-    @Column
+    @Column(name = "first")
     private String first;
-    @Column
+    @Column(name = "last")
     private String last;
 
     public void setId(Long id) {
