@@ -75,7 +75,14 @@ public class MyAiReplyProessor implements MsgProcessor{
                         jieLongTGame = new JieLongTGame(baseMsg.getGroupName());
                         new Thread(jieLongTGame).start();
                     }
+                    jieLongTGameMap.put(baseMsg.getGroupName(),jieLongTGame);
                     jieLongTGame.startGame(botMsg);
+                } else if ("结束成语接龙".equals(content)){
+                    JieLongTGame jieLongTGame = jieLongTGameMap.get(baseMsg.getGroupName());
+                    if(jieLongTGame == null){
+                        return;
+                    }
+                    jieLongTGame.endGame(baseMsg);
                 } else {
                     JieLongTGame jieLongTGame = jieLongTGameMap.get(baseMsg.getGroupName());
                     if(jieLongTGame == null){
