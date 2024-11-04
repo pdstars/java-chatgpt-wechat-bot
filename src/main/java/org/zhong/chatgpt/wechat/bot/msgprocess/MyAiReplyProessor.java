@@ -82,7 +82,7 @@ public class MyAiReplyProessor implements MsgProcessor{
                     if(jieLongTGame == null){
                         return;
                     }
-                    jieLongTGame.endGame(baseMsg);
+                    jieLongTGame.endGame();
                 } else {
                     JieLongTGame jieLongTGame = jieLongTGameMap.get(baseMsg.getGroupName());
                     if(jieLongTGame == null){
