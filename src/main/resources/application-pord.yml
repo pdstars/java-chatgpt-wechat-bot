@@ -17,14 +17,19 @@ server:
   port: 4433
 
 spring:
-  main:
-    allow-bean-definition-overriding: true
-
   datasource:
-    url: jdbc:mysql://107.151.239.215:3306/chat?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://127.0.0.1:3306/chat?useSSL=false&serverTimezone=UTC&characterEncoding=utf8&characterSetResults=utf8
     username: root
     password: 5795583
-
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 80
+      auto-commit: true
+      idle-timeout: 30000
+      connection-timeout: 30000
   jpa:
     hibernate.ddl-auto: update
     show-sql: true
+logging:
+  level:
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
