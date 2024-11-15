@@ -34,6 +34,9 @@ public class MyAiReplyProessor implements MsgProcessor{
             Map<String,String> cmdKey = CMDConst.getAllCmd();
             BotConfig botConfig = SpringUtil.getBean(BotConfig.class);
             String result = "";
+            if(text.equals(" tex")){
+                MessageTools.sendPicMsgByUserId(botMsg.getBaseMsg().getFromUserName(), "D:\\botSpace\\pipeline\\viliImg\\default\\02bde3a9641d4909839e27b3069e4988.jpg");
+            }
 
             for(String cmd : cmdKey.keySet()) {
                 if ((text.contains(cmd))) {

@@ -25,6 +25,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 import okhttp3.OkHttpClient;
+import org.zhong.chatgpt.wechat.bot.util.HttpClientUtils;
 
 /**
  * HTTP访问类，对Apache HttpClient进行简单封装，适配器模式
@@ -177,7 +178,7 @@ public class MyHttpClient {
 		httpPost.setHeader("User-Agent", Config.USER_AGENT);
 		httpPost.setHeader("client-version", Config.UOS_PATCH_CLIENT_VERSION);
 		httpPost.setHeader("extspam", Config.UOS_PATCH_EXTSPAM);
-		httpPost.setHeader("referer", Config.REFERER);
+		//httpPost.setHeader("referer", Config.REFERER);
 
 		httpPost.setEntity(reqEntity);
 		try {
@@ -185,7 +186,8 @@ public class MyHttpClient {
 			entity = response.getEntity();
 
 		} catch (Exception e) {
-			logger.info(e.getMessage());
+			logger.info("文件上传失败");
+			e.printStackTrace();
 		}
 		return entity;
 	}

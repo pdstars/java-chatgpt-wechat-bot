@@ -43,8 +43,6 @@ public class MsgPreProcessor implements MsgProcessor{
 			//为了调试日志，在此记录
 			LOG.info(String.format("收到群聊信息【%s】",botMsg.getBaseMsg().getText()));
 			LOG.info(String.format("群聊名称是【%s】",botMsg.getBaseMsg().getGroupName()));
-			NewsProcessor newsProcessor = SpringUtil.getBean(NewsProcessor.class);
-			newsProcessor.process(botMsg);
 			if(!botConfig.getGroupWhiteList().contains(baseMsg.getGroupName())) {
 				//如果群聊不在白名单
  				return;

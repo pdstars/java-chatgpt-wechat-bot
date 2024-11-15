@@ -25,6 +25,9 @@ import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.stream.Collectors;
 
+/**
+ * 成语接龙小游戏
+ */
 public class JieLongTGame implements Runnable {
 
     private static Logger LOG = LoggerFactory.getLogger(JieLongTGame.class);
