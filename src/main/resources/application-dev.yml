@@ -18,7 +18,10 @@ server:
 
 
 spring:
-
+  task:
+    scheduling:
+      pool:
+        size: 8
   datasource:
     url: jdbc:mysql://107.151.239.215:3306/chat?useSSL=false&serverTimezone=UTC&characterEncoding=utf8&characterSetResults=utf8
     username: root

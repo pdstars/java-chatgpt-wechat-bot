@@ -80,9 +80,6 @@ public class MyAiReplyProessor implements MsgProcessor{
                             MessageTools.sendPicMsgByUserId(botMsg.getBaseMsg().getFromUserName(), files[random].getPath());
                             Thread.sleep(1000);
                         }
-
-
-
                     }
                     if (cmd.equals(CMDConst.TIANGOU)) {
                         TianGProcessor tianGProcessor = SpringUtil.getBean(TianGProcessor.class);
@@ -93,6 +90,9 @@ public class MyAiReplyProessor implements MsgProcessor{
                         NewsProcessor newsProcessor = SpringUtil.getBean(NewsProcessor.class);
                         String content = newsProcessor.getNewsContent();
                         MessageTools.sendMsgById(content, botMsg.getBaseMsg().getFromUserName());
+                    }
+                    if(cmd.contains(CMDConst.TIANQI)){
+                        //解析
                     }
                 }
             }

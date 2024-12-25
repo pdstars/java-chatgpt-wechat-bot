@@ -19,6 +19,8 @@ public class CMDConst {
 
     public static String JIELONG = "成语接龙";
 
+    public static String TIANQI = "天气";
+
 
     public static Map<String,String> getAllCmd(){
         Map<String,String> result = new HashMap<>();
